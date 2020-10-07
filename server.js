@@ -1,13 +1,15 @@
-const exrpress = require('express');
+const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const app = exrpress();
+const app = express();
 require('dotenv').config({
     path: './config/index.env'
 });
 app.set('view engine', 'jade');
-app.use(exrpress.static('public'));
+app.use(express.static('public/apidoc'));
+app.use(express.static(__dirname + '/public'));
+app.set('view engine', 'html');
 
 
 app.use(bodyParser.json());
@@ -15,30 +17,22 @@ app.use(bodyParser.json());
 //MongoDB
 const connectDB = require('./config/db');
 // connectDB();
-app.use('/forgot', require('./routes/forgot.route'));
 
-// app.use(exrpress.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 app.use(morgan('dev'));
 app.use(cors());
 
 //routes
+app.get('/', function(req, res) {
+    res.render('public/apidoc/index.html');
+});
+app.use('/forgot', require('./routes/forgot.route'));
 app.use('/api/user', require('./routes/auth.route'));
 
-app.get('/', (req, res) => {
-    res.send('test route => home page');
-});
-app.get('/api/doc', (req, res) => {
-    res.render('/apidoc/index.html');
-    // res.sendFile(__dirname + './apidoc/index.html');
-    // res.sendFile('../apidoc/index.html', { root: __dirname });
-
-})
 
 app.use((req, res) => {
-    res.status(404).json({
-        msg: 'Page Not Founded'
-    })
+    res.redirect('/');
 })
 
 const PORT = process.env.PORT;

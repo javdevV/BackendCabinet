@@ -1,6 +1,6 @@
 apidoc: {
     myapp: {
-        src: "/";
+        src: "/routes";
         dest: "public/apidoc"
     }
 }
