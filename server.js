@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 
 //MongoDB
 const connectDB = require('./config/db');
-connectDB();
+// connectDB();
 app.use('/forgot', require('./routes/forgot.route'));
 
 // app.use(exrpress.urlencoded({ extended: true }));
@@ -44,5 +44,5 @@ app.use((req, res) => {
 const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
-    console.log(`listening on port ${PORT}`);
+    console.log(`[*] Listening on port ${PORT}`);
 })
