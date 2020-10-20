@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const roleSchema = require('./role.model').schema;
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -7,25 +8,37 @@ const UserSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        index: true,
+        unique: true,
+        sparse: true
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        index: true,
+        unique: true,
+        sparse: true
     },
     avatar: {
         type: String
     },
     role: {
-        type: Number,
-        default: 0
+        roleSchema
     },
-    history: { //order history
+    history: {
         type: Array,
         default: []
     },
     resetPasswordToken: String,
     resetPasswordExpires: Date
 
+}, {
+    timestamps: true
 })
+UserSchema.statics.findByRole = function(name, cb) {
+    return this.find({ role: name }, cb);
+};
+
+
 module.exports = User = mongoose.model('User', UserSchema);
